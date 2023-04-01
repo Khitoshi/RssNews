@@ -3,7 +3,9 @@
 <head>
 </head>
 <body>
+    {{ range . }}
     <h1>Title: {{.Title}}</h1>
 	<p>Link: {{.Link}}</p>
+    {{ end}}
 </body>
 </html>

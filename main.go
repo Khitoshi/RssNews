@@ -15,6 +15,7 @@ type Feed struct {
 	//Description string
 }
 
+// rss読み込み
 func loadFeed() ([]Feed, error) {
 	rssfeed, err := gofeed.NewParser().ParseURL("https://qiita.com/IXKGAGB/feed")
 	if err != nil {
@@ -45,8 +46,9 @@ func loadFeed() ([]Feed, error) {
 	return f, nil
 }
 
+// templateにfeedを渡す
 func MyHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/home.html")
+	tmpl, err := template.ParseFiles("templates/TestHome.html")
 	if err != nil {
 		panic(err)
 	}
@@ -57,7 +59,7 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//HTMLテンプレートを実行
-	err = tmpl.Execute(w, feed[0])
+	err = tmpl.Execute(w, feed)
 	if err != nil {
 		panic(err)
 	}
