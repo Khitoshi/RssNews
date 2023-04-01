@@ -10,9 +10,11 @@ import (
 )
 
 type Feed struct {
-	Title string //タイトル
-	Link  string //記事リンク
-	//Description string
+	Title           string //タイトル
+	Link            string //記事リンク
+	Description     string
+	PublishedParsed *time.Time
+	UpdatedParsed   *time.Time
 }
 
 // rss読み込み
@@ -31,9 +33,11 @@ func loadFeed() ([]Feed, error) {
 	for i, item := range rssfeed.Items {
 
 		f[i] = Feed{
-			Title: item.Title,
-			Link:  item.Link,
-			//item.Description,
+			Title:           item.Title,
+			Link:            item.Link,
+			Description:     item.Description,
+			PublishedParsed: item.PublishedParsed,
+			UpdatedParsed:   item.UpdatedParsed,
 		}
 
 		fmt.Printf("title: %v\n", item.Title)
