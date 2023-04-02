@@ -13,7 +13,7 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
-type USER struct {
+type USER struct { //ユーザー情報
 	bun.BaseModel `bun:"table:users,alias:u"`
 
 	Id         int64     `bun:"id,pk,autoincrement"`
@@ -24,7 +24,7 @@ type USER struct {
 	Updated_at time.Time `bun:"updated_at,notnull"`
 }
 
-type ITEMS struct {
+type ITEMS struct { //RSSから入手したアイテムを保管
 	bun.BaseModel `bun:"table:items,alias:i"`
 
 	Id           int64     `bun:"id,pk,autoincrement"`
@@ -37,12 +37,20 @@ type ITEMS struct {
 	Updated_at   time.Time `bun:"updated_at,notnull"`
 }
 
-type USER_ITEMS struct {
+type USER_ITEMS struct { //ユーザーが登録した，記事情報を保管
 	bun.BaseModel `bun:"table:user_items,alias:ui"`
 
-	User_id    int64     `bun:"user_id,FOREIGN KEY"`
-	Article_id int64     `bun:"article_id,FOREIGN KEY"`
-	Created_at time.Time `bun:"created_at,not null"`
+	User_id    int64     `bun:"user_id,pk"`
+	Item_id    int64     `bun:"item_id,pk"`
+	Created_at time.Time `bun:"created_at,notnull"`
+}
+
+type USER_FAVORITE_ITEMS struct { //ユーザーのお気に入りを格納
+	bun.BaseModel `bun:"table:user_favorite_items,alias:ui"`
+
+	User_id    int64     `bun:"user_id,pk"`
+	Item_id    int64     `bun:"item_id,pk"`
+	Created_at time.Time `bun:"created_at,notnull"`
 }
 
 func main() {
@@ -75,6 +83,18 @@ func main() {
 
 	ctx = context.Background()
 	_, err = db.NewCreateTable().Model((*ITEMS)(nil)).IfNotExists().Exec(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ctx = context.Background()
+	_, err = db.NewCreateTable().Model((*USER_ITEMS)(nil)).IfNotExists().Exec(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ctx = context.Background()
+	_, err = db.NewCreateTable().Model((*USER_FAVORITE_ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
