@@ -69,30 +69,35 @@ func main() {
 
 	db := bun.NewDB(sqldb, pgdialect.New())
 	defer db.Close()
+
 	//クエリのパラメーター出力
 	db.AddQueryHook(bundebug.NewQueryHook(
 		//bundebug.WithVerbose(true),
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
+	//USER Table 作成
 	ctx := context.Background()
 	_, err = db.NewCreateTable().Model((*USER)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//Items Table 作成
 	ctx = context.Background()
 	_, err = db.NewCreateTable().Model((*ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//UserItems Table 作成
 	ctx = context.Background()
 	_, err = db.NewCreateTable().Model((*USER_ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//User Favorite Items Table 作成
 	ctx = context.Background()
 	_, err = db.NewCreateTable().Model((*USER_FAVORITE_ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
