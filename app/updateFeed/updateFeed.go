@@ -55,7 +55,18 @@ func FixedTermUpdate() error {
 
 		//更新
 		for _, item := range rssfeed.Items {
-			f := ITEMS{
+			f := ITEMS{}
+			err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
+			if err != nil {
+				return err
+			}
+
+			if f.Title != "" {
+				fmt.Println("break")
+				break
+			}
+
+			f = ITEMS{
 				//Id:           nil,
 				Url:          item.Link,
 				Title:        item.Title,
