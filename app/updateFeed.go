@@ -1,4 +1,4 @@
-package main
+package customTable
 
 import (
 	"context"
@@ -26,7 +26,8 @@ type ITEMS struct { //RSSから入手したアイテムを保管
 	Updated_at   time.Time
 }
 
-func updateFeed() error {
+// itemの定期処理
+func UpdateItems() error {
 	//dbを開く
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
 	if err != nil {
@@ -49,6 +50,7 @@ func updateFeed() error {
 		return err
 	}
 
+	//更新
 	for _, item := range rssfeed.Items {
 		f := ITEMS{
 			//Id:           nil,
@@ -71,15 +73,6 @@ func updateFeed() error {
 	return nil
 }
 
-func main() {
-	startTime := time.Now()
-	fmt.Printf("start time: %v \n", startTime)
-	defer func() {
-		fmt.Printf("\n processing time: %v", time.Since(startTime).Milliseconds())
-	}()
-
-	err := updateFeed()
-	if err != nil {
-		log.Fatal(err)
-	}
+func Testfunc() {
+	fmt.Println("test")
 }

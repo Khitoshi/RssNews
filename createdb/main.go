@@ -64,6 +64,7 @@ func main() {
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 	defer sqldb.Close()
 
@@ -81,6 +82,7 @@ func main() {
 	_, err = db.NewCreateTable().Model((*USER)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	//Items Table 作成
@@ -88,6 +90,7 @@ func main() {
 	_, err = db.NewCreateTable().Model((*ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	//UserItems Table 作成
@@ -95,6 +98,7 @@ func main() {
 	_, err = db.NewCreateTable().Model((*USER_ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	//User Favorite Items Table 作成
@@ -102,6 +106,7 @@ func main() {
 	_, err = db.NewCreateTable().Model((*USER_FAVORITE_ITEMS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 }
