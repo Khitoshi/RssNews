@@ -42,11 +42,14 @@ func FixedTermUpdate() error {
 		//bundebug.WithVerbose(true),
 		bundebug.FromEnv("BUNDEBUG"),
 	))
+
+	//TODO:定期処理を10秒に設定してあるので1時間に変更
 	ticker := time.NewTicker(10 * time.Second)
 	for range ticker.C {
 
-		fmt.Println("定期処理")
+		fmt.Println("定期処理実行")
 
+		//RSSから情報取得
 		rssfeed, err := gofeed.NewParser().ParseURL("https://qiita.com/IXKGAGB/feed")
 		if err != nil {
 			//log.Fatal(err)
@@ -56,16 +59,19 @@ func FixedTermUpdate() error {
 		//更新
 		for _, item := range rssfeed.Items {
 			f := ITEMS{}
+			//すでに同じリンクが存在しないかチェック
 			err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
 			if err != nil {
 				return err
 			}
 
-			if f.Title != "" {
+			//URLが空の場合,重複なし
+			if f.Url != "" {
 				fmt.Println("break")
 				break
 			}
 
+			//INSERT処理
 			f = ITEMS{
 				//Id:           nil,
 				Url:          item.Link,
