@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	item "rss_reader/updateFeed"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -77,9 +78,7 @@ func main() {
 		fmt.Printf("\n processing time: %v", time.Since(startTime).Milliseconds())
 	}()
 
-	//go updateFeed.updateFeed()
-	//go customTable.UpdateItems()
-	//customTable.Testfunc()
+	go item.FixedTermUpdate()
 
 	http.HandleFunc("/", MyHandler)
 	//ウェブサーバを起動

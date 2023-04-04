@@ -1,4 +1,4 @@
-package customTable
+package updateFeed
 
 import (
 	"context"
@@ -7,12 +7,11 @@ import (
 	"log"
 	"time"
 
+	_ "github.com/lib/pq"
 	"github.com/mmcdole/gofeed"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
-
-	_ "github.com/lib/pq"
 )
 
 type ITEMS struct { //RSSから入手したアイテムを保管
@@ -26,8 +25,8 @@ type ITEMS struct { //RSSから入手したアイテムを保管
 	Updated_at   time.Time
 }
 
-// itemの定期処理
-func UpdateItems() error {
+// itemの定期更新
+func FixedTermUpdate() error {
 	//dbを開く
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
 	if err != nil {
@@ -43,36 +42,38 @@ func UpdateItems() error {
 		//bundebug.WithVerbose(true),
 		bundebug.FromEnv("BUNDEBUG"),
 	))
+	ticker := time.NewTicker(10 * time.Second)
+	for range ticker.C {
 
-	rssfeed, err := gofeed.NewParser().ParseURL("https://qiita.com/IXKGAGB/feed")
-	if err != nil {
-		//log.Fatal(err)
-		return err
-	}
+		fmt.Println("定期処理")
 
-	//更新
-	for _, item := range rssfeed.Items {
-		f := ITEMS{
-			//Id:           nil,
-			Url:          item.Link,
-			Title:        item.Title,
-			Description:  item.Description,
-			Author:       item.Author.Name,
-			Published_at: *item.PublishedParsed,
-			Created_at:   time.Now(),
-			Updated_at:   *item.UpdatedParsed,
-		}
-		_, err = db.NewInsert().Model(&f).Exec(context.Background())
-
+		rssfeed, err := gofeed.NewParser().ParseURL("https://qiita.com/IXKGAGB/feed")
 		if err != nil {
+			//log.Fatal(err)
 			return err
 		}
-		fmt.Printf("insert %v\n", f.Title)
+
+		//更新
+		for _, item := range rssfeed.Items {
+			f := ITEMS{
+				//Id:           nil,
+				Url:          item.Link,
+				Title:        item.Title,
+				Description:  item.Description,
+				Author:       item.Author.Name,
+				Published_at: *item.PublishedParsed,
+				Created_at:   time.Now(),
+				Updated_at:   *item.UpdatedParsed,
+			}
+			_, err = db.NewInsert().Model(&f).Exec(context.Background())
+
+			if err != nil {
+				return err
+			}
+			fmt.Printf("insert %v\n", f.Title)
+		}
+
 	}
 
 	return nil
-}
-
-func Testfunc() {
-	fmt.Println("test")
 }
