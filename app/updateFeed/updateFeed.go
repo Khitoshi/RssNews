@@ -52,6 +52,7 @@ func UpdateItemsFromRSSFeed() error {
 			err = update(db, &feed)
 			if err != nil {
 				//log.Fatal(err)
+				log.Fatal(err)
 				return err
 			}
 		}
@@ -69,7 +70,7 @@ func update(db *bun.DB, feeds *gofeed.Feed) error {
 		f := tables.ITEMS{}
 		//すでに同じリンクが存在しないかチェック
 		err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
-		if err != nil {
+		if err != nil && err != sql.ErrNoRows {
 			return err
 		}
 		//URLが空の場合,重複なし
