@@ -12,8 +12,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// templateにfeedを渡す
-func MyHandler(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/TestHome.html")
 	if err != nil {
 		panic(err)
@@ -32,6 +31,21 @@ func MyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func signup(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/Signup.html")
+	if err != nil {
+		panic(err)
+	}
+
+	//HTMLテンプレートを実行
+
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
+
+}
+
 func main() {
 	startTime := time.Now()
 	fmt.Printf("start time: %v \n", startTime)
@@ -41,11 +55,14 @@ func main() {
 
 	go updateFeed.UpdateItemsFromRSSFeed()
 
-	http.HandleFunc("/RSSReader", MyHandler)
-	//http.HandleFunc("/RSSReader/home", MyHandler)
+	//http.HandleFunc("/RSSReader", MyHandler)
+	http.HandleFunc("/RSSReader/home", home)
+	http.HandleFunc("/RSSReader/signup", signup)
+
 	//ウェブサーバを起動
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
 	}
+
 }
