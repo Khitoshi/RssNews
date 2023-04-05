@@ -41,7 +41,8 @@ func main() {
 
 	go updateFeed.UpdateItemsFromRSSFeed()
 
-	http.HandleFunc("/", MyHandler)
+	http.HandleFunc("/RSSReader", MyHandler)
+	//http.HandleFunc("/RSSReader/home", MyHandler)
 	//ウェブサーバを起動
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {

@@ -107,7 +107,6 @@ func loadRssFeed(db *bun.DB) ([]gofeed.Feed, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("rssurls:%#v\n", rssURLs)
 	rssFeed := []gofeed.Feed{}
 	//rssURLs := []string{}
 	//rssURLs = append(rssURLs, "https://qiita.com/IXKGAGB/feed")
