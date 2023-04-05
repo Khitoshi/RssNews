@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	items "rss_reader/tables"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -14,19 +15,8 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
-type ITEMS struct { //RSSから入手したアイテムを保管
-	//Id           int64
-	Url          string
-	Title        string
-	Description  string
-	Author       string
-	Published_at time.Time
-	Created_at   time.Time
-	Updated_at   time.Time
-}
-
 // itemの定期更新
-func FixedTermUpdate() error {
+func UpdateItemsFromRSSFeed() error {
 	//dbを開く
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
 	if err != nil {
@@ -58,13 +48,12 @@ func FixedTermUpdate() error {
 
 		//更新
 		for _, item := range rssfeed.Items {
-			f := ITEMS{}
+			f := items.ITEMS{}
 			//すでに同じリンクが存在しないかチェック
 			err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
 			if err != nil {
 				return err
 			}
-
 			//URLが空の場合,重複なし
 			if f.Url != "" {
 				fmt.Println("break")
@@ -72,7 +61,7 @@ func FixedTermUpdate() error {
 			}
 
 			//INSERT処理
-			f = ITEMS{
+			f = items.ITEMS{
 				//Id:           nil,
 				Url:          item.Link,
 				Title:        item.Title,
@@ -83,7 +72,6 @@ func FixedTermUpdate() error {
 				Updated_at:   *item.UpdatedParsed,
 			}
 			_, err = db.NewInsert().Model(&f).Exec(context.Background())
-
 			if err != nil {
 				return err
 			}
