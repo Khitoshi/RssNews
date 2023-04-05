@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	items "rss_reader/tables"
+	tables "rss_reader/tables"
+
 	"time"
 
 	_ "github.com/lib/pq"
@@ -33,52 +34,92 @@ func UpdateItemsFromRSSFeed() error {
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
-	//TODO:定期処理を10秒に設定してあるので1時間に変更
+	//一時間の周期処理
+	//ticker := time.NewTicker(1 * time.Hour)
 	ticker := time.NewTicker(10 * time.Second)
 	for range ticker.C {
 
 		fmt.Println("定期処理実行")
 
 		//RSSから情報取得
-		rssfeed, err := gofeed.NewParser().ParseURL("https://qiita.com/IXKGAGB/feed")
+		rssfeed, err := loadRssFeed(db)
 		if err != nil {
 			//log.Fatal(err)
 			return err
 		}
 
-		//更新
-		for _, item := range rssfeed.Items {
-			f := items.ITEMS{}
-			//すでに同じリンクが存在しないかチェック
-			err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
+		for _, feed := range rssfeed {
+			err = update(db, &feed)
 			if err != nil {
+				//log.Fatal(err)
 				return err
 			}
-			//URLが空の場合,重複なし
-			if f.Url != "" {
-				fmt.Println("break")
-				break
-			}
-
-			//INSERT処理
-			f = items.ITEMS{
-				//Id:           nil,
-				Url:          item.Link,
-				Title:        item.Title,
-				Description:  item.Description,
-				Author:       item.Author.Name,
-				Published_at: *item.PublishedParsed,
-				Created_at:   time.Now(),
-				Updated_at:   *item.UpdatedParsed,
-			}
-			_, err = db.NewInsert().Model(&f).Exec(context.Background())
-			if err != nil {
-				return err
-			}
-			fmt.Printf("insert %v\n", f.Title)
 		}
 
 	}
 
 	return nil
+}
+
+// 記事更新処理
+func update(db *bun.DB, feeds *gofeed.Feed) error {
+	for _, item := range feeds.Items {
+		fmt.Println("周期処理スタート:", time.Now())
+
+		f := tables.ITEMS{}
+		//すでに同じリンクが存在しないかチェック
+		err := db.NewSelect().Model(&f).Where("url=?", item.Link).Scan(context.Background())
+		if err != nil {
+			return err
+		}
+		//URLが空の場合,重複なし
+		if f.Url != "" {
+			fmt.Println("break")
+			break
+		}
+
+		//INSERT処理
+		f = tables.ITEMS{
+			//Id:           nil,
+			Url:          item.Link,
+			Title:        item.Title,
+			Description:  item.Description,
+			Author:       item.Author.Name,
+			Published_at: *item.PublishedParsed,
+			Created_at:   time.Now(),
+			Updated_at:   *item.UpdatedParsed,
+		}
+		_, err = db.NewInsert().Model(&f).Exec(context.Background())
+		if err != nil {
+			return err
+		}
+		fmt.Printf("insert %v\n", f.Title)
+	}
+
+	return nil
+}
+
+func loadRssFeed(db *bun.DB) ([]gofeed.Feed, error) {
+
+	rssURLs := []tables.RSS_URLS{}
+	//すでに同じリンクが存在しないかチェック
+	err := db.NewSelect().Model(&rssURLs).Where("rss_id = 0").Scan(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("rssurls:%#v\n", rssURLs)
+	rssFeed := []gofeed.Feed{}
+	//rssURLs := []string{}
+	//rssURLs = append(rssURLs, "https://qiita.com/IXKGAGB/feed")
+
+	for _, url := range rssURLs {
+		rf, err := gofeed.NewParser().ParseURL(url.Rss_URL)
+		if err != nil {
+			return nil, err
+		}
+		rssFeed = append(rssFeed, *rf)
+	}
+
+	return rssFeed, nil
+
 }

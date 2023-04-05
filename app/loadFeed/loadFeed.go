@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	items "rss_reader/tables"
+	table_items "rss_reader/tables"
 
 	//"rss_reader/updateFeed"
 	"time"
@@ -41,7 +41,7 @@ func GetFeeds() ([]Feed, error) {
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
-	items := []items.ITEMS{}
+	items := []table_items.ITEMS{}
 	err = db.NewSelect().Model(&items).Scan(context.Background())
 	if err != nil {
 		return nil, err

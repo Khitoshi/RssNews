@@ -28,6 +28,7 @@ type ITEMS struct { //RSSから入手したアイテムを保管
 	bun.BaseModel `bun:"table:items,alias:i"`
 
 	Id           int64     `bun:"id,pk,autoincrement"`
+	Rss_id       int64     `bun:"rss_id,notnull"`
 	Url          string    `bun:"url,notnull,unique"`
 	Title        string    `bun:"title,notnull"`
 	Description  string    `bun:"description,notnull"`
@@ -37,11 +38,20 @@ type ITEMS struct { //RSSから入手したアイテムを保管
 	Updated_at   time.Time `bun:"updated_at,notnull"`
 }
 
-type USER_ITEMS struct { //ユーザーが登録した，記事情報を保管
+type RSS_URLS struct {
+	bun.BaseModel `bun:"table:rss_urls,alias:ru"`
+	//User_id    int64     `bun:"user_id,pk"`
+
+	Rss_id     int64     `bun:"rss_id,pk"`
+	Rss_URL    string    `bun:"rss_url,notnull"`
+	Created_at time.Time `bun:"created_at,notnull"`
+}
+
+type USER_ITEMS struct { //ユーザーとユーザーが登録した記事をつなぐ
 	bun.BaseModel `bun:"table:user_items,alias:ui"`
 
 	User_id    int64     `bun:"user_id,pk"`
-	Item_id    int64     `bun:"item_id,pk"`
+	Rss_id     int64     `bun:"rss_id,pk"`
 	Created_at time.Time `bun:"created_at,notnull"`
 }
 
@@ -88,6 +98,14 @@ func main() {
 	//Items Table 作成
 	ctx = context.Background()
 	_, err = db.NewCreateTable().Model((*ITEMS)(nil)).IfNotExists().Exec(ctx)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	//UserItems Table 作成
+	ctx = context.Background()
+	_, err = db.NewCreateTable().Model((*RSS_URLS)(nil)).IfNotExists().Exec(ctx)
 	if err != nil {
 		log.Fatal(err)
 		return
