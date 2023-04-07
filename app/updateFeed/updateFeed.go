@@ -35,8 +35,7 @@ func UpdateItemsFromRSSFeed() error {
 	))
 
 	//一時間の周期処理
-	//ticker := time.NewTicker(1 * time.Hour)
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(1 * time.Hour)
 	for range ticker.C {
 
 		fmt.Println("定期処理実行")

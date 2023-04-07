@@ -1,3 +1,4 @@
+{{define "signup"}}
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,9 +7,9 @@
     <link rel="stylesheet" type="text/css" href="./css/Signup.css">
   </head>
   <body>
-    <form>
+    <form action="/signup" method="post">
         <label>名前を入力してください</label>
-        <input name="ID" type="text" class="">
+        <input name="name" type="text" class="">
         <br>
 
         <label>メールアドレスを入力してください</label>
@@ -16,15 +17,16 @@
         <br>
 
         <label>パスワードを入力してください</label>
-        <input name="password" type="password" class="">
+        <input name="Apassword" type="password" class="" />
         <br>
 
         <label>パスワードを再入力してください</label>
-        <input name="password" type="password" class="">
+        <input name="Bpassword" type="password" class="" />
         <br>
-        <input type="submit" name="" value="送信する">
+        <input type="submit" name="" value="送信する" />
         <br>
         
     </form>
   </body>
 </html>
+{{end}}
