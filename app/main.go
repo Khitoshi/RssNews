@@ -4,22 +4,15 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"net/http"
-	"rss_reader/loadFeed"
-	"rss_reader/updateFeed"
 	"time"
+
+	"rss_reader/pageHandles"
+	"rss_reader/updateFeed"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 )
-
-type UserSignupParams struct {
-	name      string `json:"name"`
-	mail      string `json:"mail"`
-	Apassword string `json:"apassword"`
-	Bpassword string `json:"bpassword"`
-}
 
 type Template struct {
 	templates *template.Template
@@ -27,31 +20,6 @@ type Template struct {
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-// 記事を表示するのページ
-func home(c echo.Context) error {
-	// 記事を取得
-	feed, err := loadFeed.GetFeeds()
-	if err != nil {
-		panic(err)
-	}
-	return c.Render(http.StatusOK, "testhome", feed)
-}
-
-func veiwSignup(c echo.Context) error {
-	return c.Render(http.StatusOK, "signup", nil)
-}
-
-// ユーザー登録するページ
-func signup(c echo.Context) error {
-	userparam := &UserSignupParams{}
-	userparam.name = c.FormValue("name")
-	userparam.mail = c.FormValue("mail")
-	userparam.Apassword = c.FormValue("APassword")
-	userparam.Bpassword = c.FormValue("BPassword")
-
-	return c.Redirect(http.StatusFound, "signup")
 }
 
 func main() {
@@ -73,10 +41,11 @@ func main() {
 		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
 
-	e.GET("/home", home)
+	e.GET("/", pageHandles.HandleHome_Get)
+	e.GET("/home", pageHandles.HandleHome_Get)
 
-	e.GET("/signup", veiwSignup)
-	e.POST("/signup", signup)
+	e.GET("/signup", pageHandles.HandleSignup_Get)
+	e.POST("/signup", pageHandles.HandleSignup_Post)
 
 	// サーバーをポート番号8080で起動
 	e.Logger.Fatal(e.Start(":8080"))
