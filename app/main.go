@@ -29,6 +29,7 @@ func main() {
 		fmt.Printf("\n processing time: %v", time.Since(startTime).Milliseconds())
 	}()
 
+	//記事アップデート
 	go updateFeed.UpdateItemsFromRSSFeed()
 
 	e := echo.New()

@@ -8,7 +8,7 @@ import (
 
 // ユーザー情報
 type User struct {
-	Id         int64
+	//Id         int64
 	Name       string
 	Email      string
 	Password   string

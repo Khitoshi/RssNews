@@ -3,7 +3,6 @@ module rss_reader
 go 1.20
 
 require (
-	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lib/pq v1.10.7
 	github.com/mmcdole/gofeed v1.2.1
