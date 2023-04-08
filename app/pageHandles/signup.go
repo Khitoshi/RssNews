@@ -26,15 +26,15 @@ func HandleSignup_Post(c echo.Context) error {
 	userparam.Email = c.FormValue("mail")
 	userparam.Password = c.FormValue("password")
 
-	//TODO:データベースに登録処理を記述する
 	err := registrationUser(userparam)
 	if err != nil {
-		return err
+		c.Logger().Fatal(err)
 	}
 
 	return c.Redirect(http.StatusFound, "signup")
 }
 
+// signup情報をデータベースに登録
 func registrationUser(userInfo *modules.SignUpInput) error {
 	//dbを開く
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
@@ -52,9 +52,10 @@ func registrationUser(userInfo *modules.SignUpInput) error {
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
+	//TODO:パスワードハッシュ化
 	u := modules.User{
 		Name:       userInfo.Name,
-		Email:      userInfo.Name,
+		Email:      userInfo.Email,
 		Password:   userInfo.Password,
 		Created_at: time.Now(),
 		Updated_at: time.Now(),

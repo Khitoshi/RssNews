@@ -1,0 +1,25 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>会員登録フォーム</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./css/Signup.css">
+  </head>
+  <body>
+    <form action="/login" method="post">
+        <label>メールアドレスを入力してください</label>
+        <input name="mail" type="email" class="">
+        <br>
+
+        <label>パスワードを入力してください</label>
+        <input name="password" type="password" class="" />
+        <br>
+
+        <input type="submit" name="" value="送信する" />
+        <br>
+
+    </form>
+  </body>
+</html>
+{{end}}
