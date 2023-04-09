@@ -35,6 +35,7 @@ func UpdateItemsFromRSSFeed() error {
 	))
 
 	//一時間の周期処理
+	//ticker := time.NewTicker(10 * time.Second)
 	ticker := time.NewTicker(1 * time.Hour)
 	for range ticker.C {
 
@@ -78,6 +79,8 @@ func update(db *bun.DB, feeds *gofeed.Feed) error {
 			break
 		}
 
+		//TODO:zennの場合 UpdatedParsed が実装されていない
+		//サイトによって実装されていない項目もあるので各項目でnullchekして値がない場合の処理を作る
 		//INSERT処理
 		f = tables.ITEMS{
 			//Id:           nil,
@@ -87,7 +90,8 @@ func update(db *bun.DB, feeds *gofeed.Feed) error {
 			Author:       item.Author.Name,
 			Published_at: *item.PublishedParsed,
 			Created_at:   time.Now(),
-			Updated_at:   *item.UpdatedParsed,
+			Updated_at:   time.Now(),
+			//Updated_at:   *item.UpdatedParsed,
 		}
 		_, err = db.NewInsert().Model(&f).Exec(context.Background())
 		if err != nil {
@@ -103,7 +107,7 @@ func loadRssFeed(db *bun.DB) ([]gofeed.Feed, error) {
 
 	rssURLs := []tables.RSS_URLS{}
 	//すでに同じリンクが存在しないかチェック
-	err := db.NewSelect().Model(&rssURLs).Where("rss_id = 0").Scan(context.Background())
+	err := db.NewSelect().Model(&rssURLs).Scan(context.Background())
 	if err != nil {
 		return nil, err
 	}
