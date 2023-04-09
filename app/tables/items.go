@@ -13,4 +13,5 @@ type ITEMS struct { //RSSから入手したアイテムを保管
 	Published_at time.Time
 	Created_at   time.Time
 	Updated_at   time.Time
+	Rss_id       int64
 }

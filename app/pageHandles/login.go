@@ -36,7 +36,7 @@ func HandleLogin_Post(c echo.Context) error {
 	cookie.Value = strconv.FormatInt(u.Id, 10)
 	c.SetCookie(cookie)
 
-	return c.Redirect(http.StatusFound, "login")
+	return c.Redirect(http.StatusFound, "home")
 }
 
 type USER struct { //ユーザー情報

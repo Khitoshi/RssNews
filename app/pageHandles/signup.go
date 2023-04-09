@@ -31,7 +31,7 @@ func HandleSignup_Post(c echo.Context) error {
 		c.Logger().Fatal(err)
 	}
 
-	return c.Redirect(http.StatusFound, "signup")
+	return c.Redirect(http.StatusFound, "login")
 }
 
 // signup情報をデータベースに登録

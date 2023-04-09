@@ -120,5 +120,4 @@ func loadRssFeed(db *bun.DB) ([]gofeed.Feed, error) {
 	}
 
 	return rssFeed, nil
-
 }

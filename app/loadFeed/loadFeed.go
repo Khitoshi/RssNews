@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"rss_reader/tables"
 	table_items "rss_reader/tables"
 
 	//"rss_reader/updateFeed"
@@ -41,21 +42,38 @@ func GetFeeds() ([]Feed, error) {
 		bundebug.FromEnv("BUNDEBUG"),
 	))
 
-	items := []table_items.ITEMS{}
-	err = db.NewSelect().Model(&items).Scan(context.Background())
+	//SELECT * FROM items  LEFT JOIN  (SELECT * FROM user_items WHERE user_id = 8) AS rssid ON items.rss_id = rssid.rss_id;
+	//このsqlをbunに変換する
+	//TODO: coocieからuseridを入手に変更
+	user_items := []tables.USER_ITEMS{}
+	//err = db.NewSelect().Model(user_items).Where("user_id=?", 8).Scan(context.Background())
+	//err = db.NewSelect().Model(user_items).Column("rss_id").Where("user_id = ?", 8).Scan(context.Background())
+
+	//rssid取得
+	err = db.NewSelect().Model(&user_items).Column("rss_id").Where("user_id = ?", 8).Scan(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
-	f := make([]Feed, len(items))
-	for i, item := range items {
-		f[i] = Feed{
-			Title:           item.Title,
-			Link:            item.Url,
-			Description:     item.Description,
-			PublishedParsed: &item.Published_at,
-			UpdatedParsed:   &item.Updated_at,
+	feed := []Feed{}
+	for _, item := range user_items {
+		items := []table_items.ITEMS{}
+		err = db.NewSelect().Model(&items).Where("rss_id = ?", item.Rss_id).Scan(context.Background())
+		if err != nil {
+			return nil, err
+		}
+
+		for _, item := range items {
+			f := Feed{
+				Title:           item.Title,
+				Link:            item.Url,
+				Description:     item.Description,
+				PublishedParsed: &item.Published_at,
+				UpdatedParsed:   &item.Updated_at,
+			}
+			feed = append(feed, f)
 		}
 	}
-	return f, nil
+
+	return feed, nil
 }
