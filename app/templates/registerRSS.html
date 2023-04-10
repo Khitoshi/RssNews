@@ -1,4 +1,4 @@
-{{define "logout"}}
+{{define "registerRSS"}}
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,9 +7,9 @@
     <link rel="stylesheet" type="text/css" href="./css/Signup.css">
   </head>
   <body>
-    <form action="/logout" method="post">
-        <label>コマンドを入力</label>
-        <input name="command" type="text" class="" />
+    <form action="/registerRSS" method="post">
+        <label>RSSのURLを入力してください</label>
+        <input name="rssURL" type="text" class="" />
         <br>
 
         <input type="submit" name="" value="送信する" />

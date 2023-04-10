@@ -60,8 +60,12 @@ func main() {
 	e.GET("/login", pageHandles.HandleLogin_Get)
 	e.POST("/login", pageHandles.HandleLogin_Post)
 
+	//ログアウト
 	e.GET("/logout", pageHandles.HandleLogout_Get)
 	e.POST("/logout", pageHandles.HandleLogout_Post)
+
+	e.GET("/registerRSS", pageHandles.HandleRegisterRSS_Get)
+	e.POST("/registerRSS", pageHandles.HandleRegisterRSS_Post)
 
 	// サーバーをポート番号8080で起動
 	e.Logger.Fatal(e.Start(":8080"))
