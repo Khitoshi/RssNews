@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"time"
 
 	"rss_reader/pageHandles"
+	"rss_reader/tables"
 	"rss_reader/updateFeed"
 
 	"github.com/labstack/echo/v4"
@@ -23,11 +25,18 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func main() {
+	//スタート時間・処理時間表示
 	startTime := time.Now()
 	fmt.Printf("start time: %v \n", startTime)
 	defer func() {
 		fmt.Printf("\n processing time: %v", time.Since(startTime).Milliseconds())
 	}()
+
+	//テーブル作成
+	err := tables.CreateTable()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//記事アップデート
 	go updateFeed.UpdateItemsFromRSSFeed()

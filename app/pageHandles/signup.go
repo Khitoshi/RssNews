@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"rss_reader/modules"
+	"rss_reader/tables"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -15,13 +15,20 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
+// ユーザーが登録画面で設定するパラメーター
+type SignUpInput struct {
+	Name     string
+	Email    string
+	Password string
+}
+
 func HandleSignup_Get(c echo.Context) error {
 	return c.Render(http.StatusOK, "signup", nil)
 }
 
 // ユーザー登録するページ
 func HandleSignup_Post(c echo.Context) error {
-	userparam := &modules.SignUpInput{}
+	userparam := &SignUpInput{}
 	userparam.Name = c.FormValue("name")
 	userparam.Email = c.FormValue("mail")
 	userparam.Password = c.FormValue("password")
@@ -35,7 +42,7 @@ func HandleSignup_Post(c echo.Context) error {
 }
 
 // signup情報をデータベースに登録
-func registrationUser(userInfo *modules.SignUpInput) error {
+func registrationUser(userInfo *SignUpInput) error {
 	//dbを開く
 	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
 	if err != nil {
@@ -53,7 +60,7 @@ func registrationUser(userInfo *modules.SignUpInput) error {
 	))
 
 	//TODO:パスワードハッシュ化
-	u := modules.User{
+	u := tables.USER{
 		Name:       userInfo.Name,
 		Email:      userInfo.Email,
 		Password:   userInfo.Password,
