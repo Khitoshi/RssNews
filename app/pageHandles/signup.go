@@ -2,17 +2,14 @@ package pageHandles
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
+	"rss_reader/database"
 	"rss_reader/tables"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/extra/bundebug"
 )
 
 // ユーザーが登録画面で設定するパラメーター
@@ -43,21 +40,6 @@ func HandleSignup_Post(c echo.Context) error {
 
 // signup情報をデータベースに登録
 func registrationUser(userInfo *SignUpInput) error {
-	//dbを開く
-	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sqldb.Close()
-
-	db := bun.NewDB(sqldb, pgdialect.New())
-	defer db.Close()
-
-	//クエリのパラメーター出力
-	db.AddQueryHook(bundebug.NewQueryHook(
-		//bundebug.WithVerbose(true),
-		bundebug.FromEnv("BUNDEBUG"),
-	))
 
 	//TODO:パスワードハッシュ化
 	u := tables.USER{
@@ -68,7 +50,14 @@ func registrationUser(userInfo *SignUpInput) error {
 		Updated_at: time.Now(),
 	}
 
-	_, err = db.NewInsert().Model(&u).Exec(context.Background())
+	//userテーブルに登録 登録
+	err := database.WithDBConnection(func(db *bun.DB) error {
+		_, err := db.NewInsert().Model(&u).Exec(context.Background())
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 	if err != nil {
 		return err
 	}

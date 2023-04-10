@@ -3,15 +3,13 @@ package pageHandles
 import (
 	"context"
 	"database/sql"
-	"log"
 	"net/http"
+	"rss_reader/database"
 	"rss_reader/tables"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/extra/bundebug"
 )
 
 func HandleLogin_Get(c echo.Context) error {
@@ -19,6 +17,7 @@ func HandleLogin_Get(c echo.Context) error {
 }
 
 func HandleLogin_Post(c echo.Context) error {
+	//htmlのinputから取得
 	userparam := &tables.USER{}
 	userparam.Email = c.FormValue("mail")
 	userparam.Password = c.FormValue("password")
@@ -41,24 +40,18 @@ func HandleLogin_Post(c echo.Context) error {
 // userテーブルで成否check
 func loginUser(user *tables.USER) (tables.USER, error) {
 	//dbを開く
-	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sqldb.Close()
-
-	db := bun.NewDB(sqldb, pgdialect.New())
-	defer db.Close()
-
-	//クエリのパラメーター出力
-	db.AddQueryHook(bundebug.NewQueryHook(
-		//bundebug.WithVerbose(true),
-		bundebug.FromEnv("BUNDEBUG"),
-	))
 
 	u := tables.USER{}
-	err = db.NewSelect().Model(&u).Where("email=? and password=?", user.Email, user.Password).Scan(context.Background())
+
+	err := database.WithDBConnection(func(db *bun.DB) error {
+		err := db.NewSelect().Model(&u).Where("email=? and password=?", user.Email, user.Password).Scan(context.Background())
+		if err != nil && err != sql.ErrNoRows {
+			return err
+		}
+		return nil
+	})
 	if err != nil && err != sql.ErrNoRows {
+		//return tables.USER{}, err
 		return tables.USER{}, err
 	}
 

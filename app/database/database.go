@@ -9,9 +9,17 @@ import (
 	"github.com/uptrace/bun/extra/bundebug"
 )
 
+const ( //データベースの接続用のパラメータ
+	driverName     = "postgres"
+	dataSourceName = `user=postgres 
+	dbname=rss_reader_web 
+	password=985632 
+	sslmode=disable`
+)
+
 func WithDBConnection(f func(db *bun.DB) error) error {
 	//dbを開く
-	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
+	sqldb, err := sql.Open(driverName, dataSourceName)
 	if err != nil {
 		//log.Fatal(err)
 		return err
@@ -56,3 +64,5 @@ func CreateTable(model any) error {
 
 	return nil
 }
+
+//TODO: INSERやSELECTも関数化してシンプルにする

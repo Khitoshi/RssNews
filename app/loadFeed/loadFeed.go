@@ -2,8 +2,7 @@ package loadFeed
 
 import (
 	"context"
-	"database/sql"
-	"log"
+	"rss_reader/database"
 	"rss_reader/tables"
 	table_items "rss_reader/tables"
 
@@ -12,8 +11,6 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/extra/bundebug"
 )
 
 type Feed struct {
@@ -26,21 +23,6 @@ type Feed struct {
 
 // テーブルからitemを取得
 func GetFeeds(userId int64) ([]Feed, error) {
-	//dbを開く
-	sqldb, err := sql.Open("postgres", "user=postgres dbname=rss_reader_web password=985632 sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sqldb.Close()
-
-	db := bun.NewDB(sqldb, pgdialect.New())
-	defer db.Close()
-
-	//クエリのパラメーター出力
-	db.AddQueryHook(bundebug.NewQueryHook(
-		//bundebug.WithVerbose(true),
-		bundebug.FromEnv("BUNDEBUG"),
-	))
 
 	//SELECT * FROM items  LEFT JOIN  (SELECT * FROM user_items WHERE user_id = 8) AS rssid ON items.rss_id = rssid.rss_id;
 	//このsqlをbunに変換する
@@ -51,7 +33,13 @@ func GetFeeds(userId int64) ([]Feed, error) {
 	//err = db.NewSelect().Model(user_items).Column("rss_id").Where("user_id = ?", 8).Scan(context.Background())
 
 	//rssid取得
-	err = db.NewSelect().Model(&user_items).Column("rss_id").Where("user_id = ?", userId).Scan(context.Background())
+	err := database.WithDBConnection(func(db *bun.DB) error {
+		err := db.NewSelect().Model(&user_items).Column("rss_id").Where("user_id = ?", userId).Scan(context.Background())
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +47,15 @@ func GetFeeds(userId int64) ([]Feed, error) {
 	feed := []Feed{}
 	for _, item := range user_items {
 		items := []table_items.ITEMS{}
-		err = db.NewSelect().Model(&items).Where("rss_id = ?", item.Rss_id).Scan(context.Background())
+
+		//
+		err := database.WithDBConnection(func(db *bun.DB) error {
+			err = db.NewSelect().Model(&items).Where("rss_id = ?", item.Rss_id).Scan(context.Background())
+			if err != nil {
+				return err
+			}
+			return nil
+		})
 		if err != nil {
 			return nil, err
 		}
