@@ -12,7 +12,6 @@ import (
 func HandleHome_Get(c echo.Context) error {
 	//クッキーからuseridを取得
 
-	//TODO:userIDが存在しない場合loginへ移行するようにする
 	cookie, err := c.Cookie("userId")
 	if err != nil {
 		return c.Redirect(http.StatusFound, "login")

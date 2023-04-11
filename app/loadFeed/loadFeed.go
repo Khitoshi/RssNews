@@ -27,7 +27,6 @@ func GetFeeds(userId int64) ([]Feed, error) {
 	//SELECT * FROM items  LEFT JOIN  (SELECT * FROM user_items WHERE user_id = 8) AS rssid ON items.rss_id = rssid.rss_id;
 	//このsqlをbunに変換する
 
-	//TODO: coocieからuseridを入手に変更
 	user_items := []tables.USER_ITEMS{}
 	//err = db.NewSelect().Model(user_items).Where("user_id=?", 8).Scan(context.Background())
 	//err = db.NewSelect().Model(user_items).Column("rss_id").Where("user_id = ?", 8).Scan(context.Background())

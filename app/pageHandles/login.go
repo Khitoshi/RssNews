@@ -23,7 +23,6 @@ func HandleLogin_Post(c echo.Context) error {
 	userparam.Email = c.FormValue("mail")
 	userparam.Password = cipher.HashStr(c.FormValue("password")) //パスワードはハッシュ化する
 
-	//TODO ログイン時の取得情報をidだけに変更する
 	u, err := loginUser(userparam)
 	if err != nil {
 		c.Logger().Fatal(err)

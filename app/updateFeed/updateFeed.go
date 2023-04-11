@@ -16,7 +16,7 @@ import (
 
 // 定期更新用
 func RegularUpdatingOfArticles() error {
-	//TODO:デバッグ用に10秒に1回更新をしている可能性があるので要チェック!
+	//WARNING:デバッグ用に10秒に1回更新をしている可能性があるので要チェック!
 	ticker := time.NewTicker(1 * time.Hour)
 	//ticker := time.NewTicker(10 * time.Second)
 	for range ticker.C {

@@ -64,23 +64,3 @@ func CreateTable(model any) error {
 
 	return nil
 }
-
-//TODO: INSERやSELECTも関数化してシンプルにする
-
-func InsertTable(model *any) error {
-	err := WithDBConnection(func(db *bun.DB) error {
-		ctx := context.Background()
-		_, err := db.NewInsert().Model(&model).Exec(ctx)
-		if err != nil {
-			//log.Fatal(err)
-			return err
-		}
-		return nil
-	})
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}

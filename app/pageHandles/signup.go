@@ -51,6 +51,7 @@ func registrationUser(userInfo *SignUpInput) error {
 	}
 
 	//userテーブルに登録 登録
+
 	err := database.WithDBConnection(func(db *bun.DB) error {
 		_, err := db.NewInsert().Model(&u).Exec(context.Background())
 		if err != nil {
