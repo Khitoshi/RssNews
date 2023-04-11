@@ -41,7 +41,6 @@ func HandleRegisterRSS_Post(c echo.Context) error {
 	}
 
 	//存在しなかった時,rssURLsに登録する
-	//TODO:ここからおかしい
 	if Rssid == -1 {
 		//rssurlsに登録
 		registerRSS(rssURL)

@@ -39,7 +39,7 @@ func main() {
 	}
 
 	//記事アップデート
-	go updateFeed.UpdateItemsFromRSSFeed()
+	go updateFeed.RegularUpdatingOfArticles()
 
 	e := echo.New()
 

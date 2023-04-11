@@ -14,36 +14,54 @@ import (
 	"github.com/uptrace/bun"
 )
 
-// rss_urlsテーブルに登録されているrss feed の追加処理
-func UpdateItemsFromRSSFeed() error {
-	//一時間の周期処理
-	ticker := time.NewTicker(10 * time.Second)
-	//ticker := time.NewTicker(1 * time.Hour)
+// 定期更新用
+func RegularUpdatingOfArticles() error {
+	//TODO:デバッグ用に10秒に1回更新をしている可能性があるので要チェック!
+	ticker := time.NewTicker(1 * time.Hour)
+	//ticker := time.NewTicker(10 * time.Second)
 	for range ticker.C {
 		fmt.Println("定期処理実行開始:", time.Now())
-
-		//rssのURL群を取得
-		rssURLs, err := getRssURL()
+		//更新処理
+		err := UpdateItemsFromRSSFeed()
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
 
-		for _, rssURL := range rssURLs {
-			//URL群から記事群を取得
-			feeds, err := getFeed(rssURL)
-			if err != nil {
-				return err
-			}
+// 記事の更新処理
+func UpdateItemsFromRSSFeed() error {
 
-			//記事群をテーブルに登録
-			err = insertFeeds(feeds, rssURL.Rss_id)
-			if err != nil {
-				return err
-			}
-		}
-
+	//一時間の周期処理
+	//rssのURL群を取得
+	rssURLs, err := getRssURL()
+	if err != nil {
+		return err
 	}
 
+	for _, rssURL := range rssURLs {
+		err = RegisterRSSFeeds(rssURL)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func RegisterRSSFeeds(rssURL tables.RSS_URLS) error {
+	//URLから記事群を取得
+	feeds, err := getFeed(rssURL.Rss_URL)
+	if err != nil {
+		return err
+	}
+
+	//記事群をテーブルにinsert
+	err = insertFeeds(feeds, rssURL.Rss_id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -61,9 +79,9 @@ func getRssURL() ([]tables.RSS_URLS, error) {
 }
 
 // URLから記事を取得
-func getFeed(rssurl tables.RSS_URLS) (*gofeed.Feed, error) {
+func getFeed(rssurl string) (*gofeed.Feed, error) {
 	//rssurlsから記事群を取得
-	f, err := gofeed.NewParser().ParseURL(rssurl.Rss_URL)
+	f, err := gofeed.NewParser().ParseURL(rssurl)
 	//f, err := gofeed.NewParser().ParseURL("https://qiita.com/popular-items/feed.atom")
 	if err != nil {
 		return nil, err
