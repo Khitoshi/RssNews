@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"rss_reader/cipher"
 	"rss_reader/database"
 	"rss_reader/tables"
 	"time"
@@ -28,7 +29,7 @@ func HandleSignup_Post(c echo.Context) error {
 	userparam := &SignUpInput{}
 	userparam.Name = c.FormValue("name")
 	userparam.Email = c.FormValue("mail")
-	userparam.Password = c.FormValue("password")
+	userparam.Password = cipher.HashStr(c.FormValue("password"))
 
 	err := registrationUser(userparam)
 	if err != nil {
@@ -41,7 +42,6 @@ func HandleSignup_Post(c echo.Context) error {
 // signup情報をデータベースに登録
 func registrationUser(userInfo *SignUpInput) error {
 
-	//TODO:パスワードハッシュ化
 	u := tables.USER{
 		Name:       userInfo.Name,
 		Email:      userInfo.Email,

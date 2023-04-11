@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"net/http"
+	"rss_reader/cipher"
 	"rss_reader/database"
 	"rss_reader/tables"
 	"strconv"
@@ -20,7 +21,7 @@ func HandleLogin_Post(c echo.Context) error {
 	//htmlのinputから取得
 	userparam := &tables.USER{}
 	userparam.Email = c.FormValue("mail")
-	userparam.Password = c.FormValue("password")
+	userparam.Password = cipher.HashStr(c.FormValue("password")) //パスワードはハッシュ化する
 
 	//TODO ログイン時の取得情報をidだけに変更する
 	u, err := loginUser(userparam)
