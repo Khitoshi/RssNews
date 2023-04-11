@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"rss_reader/database"
 	"rss_reader/tables"
+	"rss_reader/updateFeed"
 	"strconv"
 	"time"
 
@@ -45,11 +46,21 @@ func HandleRegisterRSS_Post(c echo.Context) error {
 		//rssurlsに登録
 		registerRSS(rssURL)
 
+		//rssURL rssfeedsを入手してテーブルに入れる
+
 		//すでに同じURLが登録されていないかチェック
 		Rssid, err = hasRSSURLAlreadyRegistered(rssURL)
 		if err != nil || Rssid == -1 {
 			return err
 		}
+
+		rss := tables.RSS_URLS{
+			Rss_id:  Rssid,
+			Rss_URL: rssURL,
+		}
+
+		//追加したrssの記事をテーブルに追加
+		updateFeed.RegisterRSSFeeds(rss)
 	}
 
 	//user_itemに登録

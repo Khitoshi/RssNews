@@ -133,7 +133,7 @@ func insertFeeds(feeds *gofeed.Feed, rssID int64) error {
 			Title:        feed.Title,
 			Url:          feed.Link,
 			Description:  feed.Description,
-			Author:       "test",
+			Author:       feed.Author.Name,
 			Published_at: time.Now(),
 			Created_at:   time.Now(),
 			Updated_at:   time.Now(),
