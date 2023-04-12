@@ -11,7 +11,6 @@ import (
 // 記事を表示するのページ
 func HandleHome_Get(c echo.Context) error {
 	//クッキーからuseridを取得
-
 	cookie, err := c.Cookie("userId")
 	if err != nil {
 		return c.Redirect(http.StatusFound, "login")

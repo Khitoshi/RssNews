@@ -47,6 +47,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.Static("/css", "./templates/css")
+
 	e.Renderer = &Template{
 		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
