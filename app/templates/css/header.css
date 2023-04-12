@@ -1,0 +1,36 @@
+header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#header-tools{
+    overflow: hidden;
+    position: absolute;;
+    z-index: 2;
+    user-select: none;
+    right: 0;
+    top: 0;
+    height: 32px;
+    font-size: 13px;
+    line-height: 32px;
+}
+
+#header-menu{
+    list-style: none;
+    display: inline-block;
+    padding: 10px;
+    color: red;
+}
+
+header>nav {
+    position: absolute;
+    float: right;
+    right: 10px;
+    top: 0px;
+    line-height: 50px;
+    color: red;
+}
+

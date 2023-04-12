@@ -1,0 +1,9 @@
+
+@import url("./font_Manager.css");
+
+#title-logo{
+    background-color: rgba(53, 49, 58, 1.0) ;
+    color: #888888;
+    font-family: 'Sarina', sans-serif;
+    margin:0%;
+}
