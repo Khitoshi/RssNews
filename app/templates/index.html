@@ -1,0 +1,137 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RSS Reader</title>
+  <link rel="stylesheet" href="tmp/css/style.css">
+  <link rel="stylesheet" href="tmp/css/accordion.css">
+</head>
+<body>
+  <!-- ナビゲーションバー -->
+  <nav>
+    <a href="#" class="logo">RSS Reader</a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Feeds</a></li>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#" id="login-link">Login</a></li>
+    </ul>
+  </nav>
+
+  <div class="wrapper">
+    <ul class="tab">
+      <li class = "active"><a href="#a">ランチ</a></li>
+      <li><a href="#b">ドリンク</a></li>
+      <li><a href="#c">ディナー</a></li>
+    </ul>
+  </div>
+
+  <div id="a" class="area is-active">
+  <ul class="accordion-area">
+    <li>
+      <section>
+        <h3 class="title">a</h3>
+        <div class="box">
+          <p>内容によって変化いたしますのでまずはお問い合わせフォームよりご相談ください。</p>
+        </div>
+      </section>
+    </li>
+    <li>
+      <section>
+        <h3 class="title">地方ですが発注は可能でしょうか</h3>
+        <div class="box">
+          <p>可能です。お気軽にご相談ください。</p>
+        </div>
+      </section>
+    </li>
+    <li>
+      <section>
+        <h3 class="title">セミナーやイベントの出演を依頼したいのですが</h3>
+        <div class="box">
+          <p>お問い合わせフォームより日時や内容などをご記入いただきご相談ください。</p>
+        </div>
+      </section>
+    </li>
+  </ul>
+    </div>
+
+  <div id="b" class="area">
+    <ul class="accordion-area">
+      <li>
+        <section>
+          <h3 class="title">b</h3>
+          <div class="box">
+            <p>内容によって変化いたしますのでまずはお問い合わせフォームよりご相談ください。</p>
+          </div>
+        </section>
+      </li>
+      <li>
+        <section>
+          <h3 class="title">地方ですが発注は可能でしょうか</h3>
+          <div class="box">
+            <p>可能です。お気軽にご相談ください。</p>
+          </div>
+        </section>
+      </li>
+      <li>
+        <section>
+          <h3 class="title">セミナーやイベントの出演を依頼したいのですが</h3>
+          <div class="box">
+            <p>お問い合わせフォームより日時や内容などをご記入いただきご相談ください。</p>
+          </div>
+        </section>
+        
+      </li>
+    </ul>
+    </div>
+
+  <div id="c" class="area">
+      <ul class="accordion-area">
+        <li>
+          <section>
+            <h3 class="title">c</h3>
+            <div class="box">
+              <p>内容によって変化いたしますのでまずはお問い合わせフォームよりご相談ください。</p>
+            </div>
+          </section>
+        </li>
+        <li>
+          <section>
+            <h3 class="title">地方ですが発注は可能でしょうか</h3>
+            <div class="box">
+              <p>可能です。お気軽にご相談ください。</p>
+            </div>
+          </section>
+        </li>
+        <li>
+          <section>
+            <h3 class="title">セミナーやイベントの出演を依頼したいのですが</h3>
+            <div class="box">
+              <p>お問い合わせフォームより日時や内容などをご記入いただきご相談ください。</p>
+            </div>
+          </section>
+          
+        </li>
+      </ul>
+      /div>
+
+  <!-- モーダルウィンドウ -->
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Modal Window</h2>
+      <p>This is the content of the modal window.</p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="tmp/js/tabsystem.js"></script>
+  <script src="tmp/js/accordion.js"></script>
+  <script src="tmp/js/login.js"></script>
+
+</body>
+</html>
+
+{{end}}

@@ -47,13 +47,15 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.Static("/css", "./templates/css")
+	e.Static("/tmp", "./templates/")
 
 	e.Renderer = &Template{
 		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
 
-	e.GET("/", pageHandles.HandleHome_Get)
+	e.GET("/", pageHandles.Hoge)
+
+	//e.GET("/", pageHandles.HandleHome_Get)
 	e.GET("/home", pageHandles.HandleHome_Get)
 
 	e.GET("/signup", pageHandles.HandleSignup_Get)
