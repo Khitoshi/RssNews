@@ -1,4 +1,4 @@
-{{define "login"}}
+{{define "logout"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="tmp/css/login.css">
+    <link rel="stylesheet" href="tmp/css/logout.css">
 </head>
 <body>
-    <div class="login">
-        <h1>Login</h1>
+    <div class="logout">
+        <h1>logout</h1>
         <form method="post">
+            <input type="text" name="name" placeholder="UserName" required="required" />
             <input type="text" name="mail" placeholder="Email" required="required" />
             <input type="password" name="password" placeholder="Password" required="required" />
             <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
-            <a>アカウントがない方:<a href = "/logout">こちら</a></a>
+            <a>アカウントがある方:<a href = "/login">こちら</a></a>
         </form>
     </div>
 </body>

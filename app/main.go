@@ -53,9 +53,7 @@ func main() {
 		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
 
-	e.GET("/", pageHandles.Hoge)
-
-	//e.GET("/", pageHandles.HandleHome_Get)
+	e.GET("/", pageHandles.HandleHome_Get)
 	e.GET("/home", pageHandles.HandleHome_Get)
 
 	e.GET("/signup", pageHandles.HandleSignup_Get)

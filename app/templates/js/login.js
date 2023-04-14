@@ -1,10 +1,13 @@
+/*
 // ログイン状態を管理する変数
 let isLoggedIn = false;
 
+
 // ログイン状態によって表示するリンクを変更する関数
 function updateNavLinks() {
-  /*
+  
   const loginLink = document.getElementById('login-link');
+
   if (isLoggedIn) {
     loginLink.innerText = 'Logout';
     loginLink.removeEventListener('click', handleLoginClick);
@@ -13,19 +16,6 @@ function updateNavLinks() {
     loginLink.innerText = 'Login';
     loginLink.removeEventListener('click', handleLogoutClick);
     loginLink.addEventListener('click', handleLoginClick);
-  }*/
-
-  //
-  if (document.cookie.indexOf('userId=') !== -1){
-    document.getElementById("login-link").innerHTML = "<a href='/login' id='login-link'>Login</a>";
-    //loginLink.innerText = 'Login';
-    loginLink.removeEventListener('click', handleLogoutClick);
-    loginLink.addEventListener('click', handleLoginClick);
-  }else{//存在しなかった場合
-    document.getElementById("logout-link").innerHTML = "<a href='/logout' id='logout-link'>Logout</a>";
-    //loginLink.innerText = 'Logout';
-    loginLink.removeEventListener('click', handleLoginClick);
-    loginLink.addEventListener('click', handleLogoutClick);
   }
 }
 
@@ -33,6 +23,7 @@ function updateNavLinks() {
 function handleLoginClick() {
   isLoggedIn = true;
   updateNavLinks();
+  alert("in")
   //TODO:このファイルでクッキーの確認をしてlogin | logoutの遷移を変更させる処理をさせる
 }
 
@@ -40,6 +31,8 @@ function handleLoginClick() {
 function handleLogoutClick() {
   isLoggedIn = false;
   updateNavLinks();
+  
+  alert("out")
 }
 
 // ページ読み込み時に初期化する処理
@@ -47,4 +40,20 @@ function initialize() {
   updateNavLinks();
 }
 
+initialize();
+*/
+
+function initialize(){
+  const loginLink = document.getElementById('login-link');
+  const value = document.cookie.indexOf("userId")
+  if(value != -1){
+    isLoggedIn = true;
+    loginLink.innerText = "logout";
+    loginLink.href = "/logout";
+  }else{
+    isLoggedIn = false;
+    loginLink.innerText = "login";
+    loginLink.href = "/login"
+  }
+}
 initialize();

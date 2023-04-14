@@ -4,16 +4,19 @@
 .tab{
   display: flex;
   flex-wrap: wrap;
+  background-color: #888;
 }
 .tab li a{
   display: block;
-  background:#ddd;
   margin:0 2px;
   padding:10px 20px;
+  color:white;
+  background-color: #333;
 }
 /*liにactiveクラスがついた時の形状*/
 .tab li.active a{
-  background:#fff;
+  background: #fff;
+  color: black;
 }
 
 
@@ -21,16 +24,17 @@
 .area {
   display: none;/*はじめは非表示*/
   opacity: 0;/*透過0*/
-  background: #fff;
   padding:50px 20px;
 }
 
 /*areaにis-activeというクラスがついた時の形状*/
 .area.is-active {
-    display: block;/*表示*/
-    animation-name: displayAnime;/*ふわっと表示させるためのアニメーション*/
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
+  display: block;/*表示*/
+  animation-name: displayAnime;/*ふわっと表示させるためのアニメーション*/
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  /*background: #fff;*/
+  /*background-color: #888;*/
 }
 
 @keyframes displayAnime{
@@ -47,7 +51,7 @@
 /*========= レイアウトのためのCSS ===============*/
 
 body{
-  background:#eee;
+  background:#333;
 }
 
 ul{
