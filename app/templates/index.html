@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>RSS Reader</title>
   <link rel="stylesheet" href="tmp/css/menu.css">
+  <link rel="stylesheet" href="tmp/css/feedlist.css">
   <link rel="stylesheet" href="tmp/css/header.css">
   <link rel="stylesheet" href="tmp/css/style.css">
   <link rel="stylesheet" href="tmp/css/accordion.css">
@@ -19,8 +20,9 @@
 <nav id="g-nav">
 <div id="g-nav-list"><!--ナビの数が増えた場合縦スクロールするためのdiv※不要なら削除-->
 <ul>
-<li><a href="#">Top</a></li>
+<li><a href="/">Top</a></li>
 <li><a href="#">About</a></li>
+<li><a href="#">Github</a></li>
 <li><a href="/login" id="login-link">Login</a></li>
 </ul>
 </div>
@@ -29,7 +31,7 @@
   <div class="wrapper">
     <ul class="tab">
       <li class = "active"><a href="#Favorite-list">お気に入り</a></li>
-      <li class = "active"><a href="#Feed-list">購読リスト</a></li>
+      <li class = "active"><a href="#Feed-list">購読追加</a></li>
       <li><a href="#a">記事のサイト名</a></li>
     </ul>
   </div>
@@ -48,16 +50,17 @@
   </div>
 
   <div id="Feed-list" class="area is-active">
-  <ul class="accordion-area">
-    <li>
-      <section>
-        <h3 class="title">a</h3>
-        <div class="box">
-          <p>内容によって変化いたしますのでまずはお問い合わせフォームよりご相談ください。</p>
-        </div>
-      </section>
-    </li>
-  </ul>
+    <!--<div id="form-block">-->
+    <form id="form-block" method="post">
+      <div class="additem">入力欄を増やす</div>
+
+      <div class="item">
+          <label>購読したいRSS-URL:<input type="text"></label><span class="close-icon">✖</span>
+      </div>
+      <div style="display: block; clear: both;" >
+        <button type="submit">保存</button>
+      </div>
+    </form>
   </div>
 
 
@@ -69,7 +72,7 @@
           <h3 class="title">{{.Title}}</h3>
           <div class="box">
             <p>{{ .Description }}</p>
-            <p>Link:<a href={{.Link}} target="_blank" style="color:blue">{{ .Title }}</a>></p>
+            <p>Link:<a href = {{.Link}} target="_blank" style="color:blue">{{ .Title }}</a></p>
           </div>
         </section>
       </li>
@@ -89,6 +92,7 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <script src="tmp/js/menu.js"></script>
+  <script src="tmp/js/feedlist.js"></script>
   <script src="tmp/js/tabsystem.js"></script>
   <script src="tmp/js/accordion.js"></script>
   <script src="tmp/js/login.js"></script>
