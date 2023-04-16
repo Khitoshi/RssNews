@@ -53,21 +53,31 @@ func main() {
 		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
 
+	//トップページ
 	e.GET("/", pageHandles.HandleHome_Get)
 	e.GET("/home", pageHandles.HandleHome_Get)
+	e.GET("/top", pageHandles.HandleHome_Get)
 
+	//サインアップページ
 	e.GET("/signup", pageHandles.HandleSignup_Get)
 	e.POST("/signup", pageHandles.HandleSignup_Post)
 
+	//ログインページ
 	e.GET("/login", pageHandles.HandleLogin_Get)
 	e.POST("/login", pageHandles.HandleLogin_Post)
 
-	//ログアウト
+	//ログアウトページ
 	e.GET("/logout", pageHandles.HandleLogout_Get)
 	e.POST("/logout", pageHandles.HandleLogout_Post)
 
+	//RSS登録画面
 	e.GET("/registerRSS", pageHandles.HandleRegisterRSS_Get)
 	e.POST("/registerRSS", pageHandles.HandleRegisterRSS_Post)
+
+	//RAA管理用ページ
+	e.GET("/rsslist", pageHandles.HandleRSSList_Get)
+	e.POST("/rsslist", pageHandles.HandleRSSList_Post)
+	//e.POST("/registerRSS", pageHandles.HandleRegisterRSS_Post)
 
 	// サーバーをポート番号8080で起動
 	e.Logger.Fatal(e.Start(":8080"))

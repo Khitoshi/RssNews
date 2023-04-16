@@ -39,7 +39,7 @@ function createNewForm() {
 
   const newForm = document.createElement('input');
   newForm.type = 'text';
-
+  newForm.name = `rssURL`
   const newLabel = document.createElement('label');
   newLabel.textContent = '購読したいRSS-URL:';
 
@@ -47,8 +47,8 @@ function createNewForm() {
   newSpan.classList.add('close-icon');
   newSpan.textContent = '✖';
 
-  newLabel.appendChild(newForm);
-  newDiv.appendChild(newLabel);
+  //newLabel.appendChild(newForm);
+  newDiv.appendChild(newForm);
   newDiv.appendChild(newSpan);
 
   // 「✖」をクリックしたときの処理を追加
