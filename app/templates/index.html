@@ -31,12 +31,30 @@
 
   <div class="wrapper">
     <ul class="tab">
-      <li class = "active"><a href="#Favorite-list">お気に入り</a></li>
-      <li><a href="#a">記事のサイト名</a></li>
+      <li class = "active"><a href="#Notice">お気に入り</a></li>
+      <li><a href="#Favorite-list">お気に入り</a></li>
+      {{range.}}
+      <li><a href="#{{.siteName}}">{{.siteName}}</a></li>
+      {{end}}
     </ul>
   </div>
 
-  <div id="#Favorite-list" class="area">
+<!--運営からのお知らせ-->
+<div id="Notice" class="area is-active">
+  <ul class="accordion-area">
+    <li>
+      <section>
+        <h3 class="title">お知らせ</h3>
+        <div class="box">
+          <p>お気に入りリスト</p>
+        </div>
+      </section>
+    </li>
+  </ul>
+  </div>
+
+  <!--お気に入りタブ-->
+  <div id="Favorite-list" class="area">
   <ul class="accordion-area">
     <li>
       <section>
@@ -49,25 +67,28 @@
   </ul>
   </div>
 
-  <div id="Feed-list" class="area is-active">
-    <!--<div id="form-block">-->
-  </div>
 
-  <div id="a" class="area">
+<!--記事表示タブ-->
+{{ range.}}
+  <div id={{.siteName}} class="area">
     <ul class="accordion-area">
-      {{ range .}}
-      <li>
-        <section>
-          <h3 class="title">{{.Title}}</h3>
-          <div class="box">
-            <p>{{ .Description }}</p>
-            <p>Link:<a href = {{.Link}} target="_blank" style="color:blue">{{ .Title }}</a></p>
-          </div>
+      <!--
+
+        {{ range .}}
+        <li>
+          <section>
+            <h3 class="title">{{.feeds.Title}}</h3>
+            <div class="box">
+              <p>{{ .feeds.Description }}</p>
+              <p>Link:<a href = {{.feeds.Link}} target="_blank" style="color:blue">{{ .feeds.Title }}</a></p>
+            </div>
         </section>
       </li>
       {{end}}
+    -->
     </ul>
     </div>
+{{end}}
 
   <!-- モーダルウィンドウ -->
   <div class="modal">

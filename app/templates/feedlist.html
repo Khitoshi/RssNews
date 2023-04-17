@@ -14,11 +14,11 @@
         <form id="form-block" method="post">
             <div class="additem">入力欄を増やす</div>
             <button type="submit">保存</button>
+            {{ range .}}
             <div class="item">
-                {{ range .}}
                 <input type="text" value={{.Rss_URL}} name="rssURL"><span class="close-icon">✖</span>
-                {{end}}
             </div>
+            {{end}}
           </form>
     </div>
 

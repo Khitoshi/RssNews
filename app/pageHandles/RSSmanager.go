@@ -72,10 +72,17 @@ func HandleRSSList_Post(c echo.Context) error {
 	}
 
 	//input値を取得
-	for "" != c.FormValue("rssURL") {
-		//TODO:ずっとzennのURLが入っている状態なのでチェックする
-		rssURL := c.FormValue("rssURL")
 
+	//全てのパラメーター取得
+	params, err := c.FormParams()
+	if err != nil {
+		return err
+	}
+	//パラメーターからrssURLという名前の物だけを取得
+	rssURLs := params["rssURL"]
+
+	//rssURLの登録処理
+	for _, rssURL := range rssURLs {
 		//すでに同じURLが登録されていないかチェック
 		Rssid, err := hasRSSURLAlreadyRegistered(rssURL)
 		if err != nil {
@@ -103,9 +110,18 @@ func HandleRSSList_Post(c echo.Context) error {
 			//追加したrssの記事をテーブルに追加
 			updateFeed.RegisterRSSFeeds(rss)
 		}
-		//user_itemに登録
-		RegisterSubscriptionUserItem(Rssid, userID)
-	}
 
+		//登録されているかチェック
+		hasUserItem, err := HasRegisterSubscriptionUserItem(Rssid, userID)
+		if err != nil {
+			return err
+		}
+
+		//登録されていない場合、登録する
+		if !hasUserItem {
+			RegisterSubscriptionUserItem(Rssid, userID)
+		}
+		//user_itemに登録
+	}
 	return c.Redirect(http.StatusFound, "/")
 }

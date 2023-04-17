@@ -115,12 +115,31 @@ func registerRSS(rssurl string) error {
 	return nil
 }
 
+// userItemに既に登録されているかのチェック//return falseの時、登録されていない
+func HasRegisterSubscriptionUserItem(rssID, userID int64) (bool, error) {
+	//useritemsを追加
+	u := tables.USER_ITEMS{}
+	err := database.WithDBConnection(func(db *bun.DB) error {
+		err := db.NewSelect().Model(&u).Where("rss_id=? AND user_id=?", rssID, userID).Scan(context.Background())
+		if err != nil && err != sql.ErrNoRows {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return false, err
+	}
+
+	if u.Rss_id == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 // userItemに登録
 func RegisterSubscriptionUserItem(rssID, userID int64) error {
-	//ユーザーIDはクッキーからとれる
-	//RSSIDはそのURLのが存在していたらそれを
-	//でもgolangの場合自動で初期化され0になるのではという疑問
-
+	//useritemsを追加
 	u := tables.USER_ITEMS{
 		Rss_id:     rssID,
 		User_id:    userID,
@@ -140,11 +159,3 @@ func RegisterSubscriptionUserItem(rssID, userID int64) error {
 	return nil
 
 }
-
-//すでに登録されている場合
-//登録されているidを使用して、useritemに登録
-
-//urlが登録されていない場合
-//新たにrssurlsに登録する
-//登録されたrssurlのidを使用して
-//useritemに登録

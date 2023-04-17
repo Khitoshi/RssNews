@@ -2,6 +2,7 @@ package loadFeed
 
 import (
 	"context"
+	"fmt"
 	"rss_reader/database"
 	"rss_reader/tables"
 	table_items "rss_reader/tables"
@@ -21,8 +22,13 @@ type Feed struct {
 	UpdatedParsed   *time.Time
 }
 
+type News struct {
+	siteName string
+	feeds    []Feed
+}
+
 // テーブルからitemを取得
-func GetFeeds(userId int64) ([]Feed, error) {
+func GetFeeds(userId int64) ([]News, error) {
 
 	//SELECT * FROM items  LEFT JOIN  (SELECT * FROM user_items WHERE user_id = 8) AS rssid ON items.rss_id = rssid.rss_id;
 	//このsqlをbunに変換する
@@ -43,8 +49,10 @@ func GetFeeds(userId int64) ([]Feed, error) {
 		return nil, err
 	}
 
-	feed := []Feed{}
-	for _, item := range user_items {
+	news := []News{}
+
+	for i, item := range user_items {
+		feed := []Feed{}
 		items := []table_items.ITEMS{}
 
 		//
@@ -69,7 +77,10 @@ func GetFeeds(userId int64) ([]Feed, error) {
 			}
 			feed = append(feed, f)
 		}
+		//TODOここの作りを考える
+		news[i].feeds = feed
+		news[i].siteName = fmt.Sprintf("%v", i)
 	}
 
-	return feed, nil
+	return news, nil
 }

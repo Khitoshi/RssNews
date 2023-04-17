@@ -8,10 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Hoge(c echo.Context) error {
-	return c.Render(http.StatusOK, "index", nil)
-}
-
 // 記事を表示するのページ
 func HandleHome_Get(c echo.Context) error {
 	//クッキーからuseridを取得
@@ -27,10 +23,11 @@ func HandleHome_Get(c echo.Context) error {
 	}
 
 	// 記事を取得
-	feed, err := loadFeed.GetFeeds(userId)
+	news, err := loadFeed.GetFeeds(userId)
+
 	//feed, err := loadFeed.GetFeeds(8)
 	if err != nil {
 		panic(err)
 	}
-	return c.Render(http.StatusOK, "index", feed)
+	return c.Render(http.StatusOK, "index", news)
 }
