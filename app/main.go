@@ -55,8 +55,6 @@ func main() {
 
 	//トップページ
 	e.GET("/", pageHandles.HandleHome_Get)
-	e.GET("/home", pageHandles.HandleHome_Get)
-	e.GET("/top", pageHandles.HandleHome_Get)
 
 	//サインアップページ
 	e.GET("/signup", pageHandles.HandleSignup_Get)

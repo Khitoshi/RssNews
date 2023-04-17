@@ -1,6 +1,7 @@
 {{define "index"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="jp">
+
 <head>
   <meta charset="UTF-8">
   <title>RSS Reader</title>
@@ -10,85 +11,81 @@
   <link rel="stylesheet" href="tmp/css/style.css">
   <link rel="stylesheet" href="tmp/css/accordion.css">
 </head>
+
 <body>
   <!-- ナビゲーションバー -->
   <header id="header">
     <h1>Logo</h1>
   </header>
 
-<div class="openbtn1"><span></span><span></span><span></span></div>
-<nav id="g-nav">
-<div id="g-nav-list"><!--ナビの数が増えた場合縦スクロールするためのdiv※不要なら削除-->
-<ul>
-<li><a href="/">Top</a></li>
-<li><a href="#">About</a></li>
-<li><a href="rsslist">RSSURL管理</a></li>
-<li><a href="#">Github</a></li>
-<li><a href="/login" id="login-link">Login</a></li>
-</ul>
-</div>
-</nav>
+  <div class="openbtn1"><span></span><span></span><span></span></div>
+  <nav id="g-nav">
+    <div id="g-nav-list"><!--ナビの数が増えた場合縦スクロールするためのdiv※不要なら削除-->
+      <ul>
+        <li><a href="/">Top</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="/rsslist">RSSURL管理</a></li>
+        <li><a href="#">Github</a></li>
+        <li><a href="/login" id="login-link">Login</a></li>
+      </ul>
+    </div>
+  </nav>
 
   <div class="wrapper">
     <ul class="tab">
-      <li class = "active"><a href="#Notice">お気に入り</a></li>
+      <li class="active"><a href="#Notice">お知らせ</a></li>
       <li><a href="#Favorite-list">お気に入り</a></li>
-      {{range.}}
-      <li><a href="#{{.siteName}}">{{.siteName}}</a></li>
-      {{end}}
+      <li><a href="#a">feed</a></li>
     </ul>
   </div>
 
-<!--運営からのお知らせ-->
-<div id="Notice" class="area is-active">
-  <ul class="accordion-area">
-    <li>
-      <section>
-        <h3 class="title">お知らせ</h3>
-        <div class="box">
-          <p>お気に入りリスト</p>
-        </div>
-      </section>
-    </li>
-  </ul>
+  <!--運営からのお知らせ-->
+  <div id="Notice" class="area is-active">
+    <ul class="accordion-area">
+      <li>
+        <section>
+          <h3 class="title">お知らせ</h3>
+          <div class="box">
+            <p>お気に入りリスト</p>
+          </div>
+        </section>
+      </li>
+    </ul>
   </div>
+
 
   <!--お気に入りタブ-->
   <div id="Favorite-list" class="area">
-  <ul class="accordion-area">
-    <li>
-      <section>
-        <h3 class="title">お気に入りリストタイトル</h3>
-        <div class="box">
-          <p>お気に入りリスト</p>
-        </div>
-      </section>
-    </li>
-  </ul>
+    <ul class="accordion-area">
+      <li>
+        <section>
+          <h3 class="title">お気に入りリストタイトル</h3>
+          <div class="box">
+            <p>お気に入りリスト</p>
+          </div>
+        </section>
+      </li>
+    </ul>
   </div>
 
 
-<!--記事表示タブ-->
-{{ range.}}
-  <div id={{.siteName}} class="area">
-    <ul class="accordion-area">
-      <!--
-
+  <!--記事表示タブ-->
+<div id="a" class="area">
+  <ul class="accordion-area">
         {{ range .}}
         <li>
           <section>
-            <h3 class="title">{{.feeds.Title}}</h3>
+            <h3 class="title">{{.Title}}</h3>
             <div class="box">
-              <p>{{ .feeds.Description }}</p>
-              <p>Link:<a href = {{.feeds.Link}} target="_blank" style="color:blue">{{ .feeds.Title }}</a></p>
+              <p>{{ .Description }}</p>
+              <p>Link:<a href = {{.Link}} target="_blank" style="color:blue">{{ .Title }}</a></p>
             </div>
         </section>
+        {{end}}
       </li>
-      {{end}}
-    -->
+      
     </ul>
-    </div>
-{{end}}
+  </div>
 
   <!-- モーダルウィンドウ -->
   <div class="modal">
@@ -99,15 +96,16 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <script src="tmp/js/menu.js"></script>
-  <script src="tmp/js/feedlist.js"></script>
   <script src="tmp/js/tabsystem.js"></script>
   <script src="tmp/js/accordion.js"></script>
   <script src="tmp/js/login.js"></script>
 
 </body>
+
 </html>
 
 {{end}}
