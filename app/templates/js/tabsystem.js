@@ -23,21 +23,6 @@ function GethashID (hashIDName){
     return false;//aタグを無効にする
   });
   
-  //タブをクリックしたら
-  $('.tab a a').on('click', function() {
-    e.preventDefault();
-    $(this).tab('show');
-    var rssIndex = $(this).parent().index();
-    $.ajax({
-      url: '/rss/' + rssIndex,
-      type: 'GET',
-      success: function (data) {
-        // RSSの内容を表示する
-        $('#rss-' + rssIndex).html(data);
-      }
-    });
-  });
-  
   // 上記の動きをページが読み込まれたらすぐに動かす
   $(window).on('load', function () {
       $('.tab li:first-of-type').addClass("active"); //最初のliにactiveクラスを追加
