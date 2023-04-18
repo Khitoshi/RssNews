@@ -35,7 +35,7 @@
     <ul class="tab">
       <li class="active"><a href="#Notice">お知らせ</a></li>
       <li><a href="#Favorite-list">お気に入り</a></li>
-      <li><a href="#a">feed</a></li>
+      <li><a href="#feed">feed</a></li>
     </ul>
   </div>
 
@@ -70,7 +70,7 @@
 
 
   <!--記事表示タブ-->
-<div id="a" class="area">
+<div id="feed" class="area">
   <ul class="accordion-area">
         {{ range .}}
         <li>
@@ -81,9 +81,8 @@
               <p>Link:<a href = {{.Link}} target="_blank" style="color:blue">{{ .Title }}</a></p>
             </div>
         </section>
-        {{end}}
       </li>
-      
+      {{end}}
     </ul>
   </div>
 

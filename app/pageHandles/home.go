@@ -24,10 +24,11 @@ func HandleHome_Get(c echo.Context) error {
 
 	// 記事を取得
 	news, err := loadFeed.GetFeeds(userId)
-	_ = news
+
 	//feed, err := loadFeed.GetFeeds(8)
 	if err != nil {
 		panic(err)
 	}
+
 	return c.Render(http.StatusOK, "index", news)
 }
