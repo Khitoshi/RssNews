@@ -24,15 +24,14 @@ windows
 postgresql
 
 ### programming language
-golang 
-javascript
-
-HTML/CSS
+golang <br>
+javascript <br>
+HTML/CSS<br>
 
 ## Usage
-動作にはpostgresqlが必要となります.
-1.postgresqlにrss_reader_webというデータベースを作成する.
-2.main.goを起動
+動作にはpostgresqlが必要となります.<br>
+1.postgresqlにrss_reader_webというデータベースを作成する.<br>
+2.main.goを起動<br>
 
 で基本的にシステムは動作します.
 
